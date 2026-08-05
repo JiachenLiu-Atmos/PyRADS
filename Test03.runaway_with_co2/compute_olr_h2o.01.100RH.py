@@ -5,7 +5,7 @@ import sys,os
 sys.path.append("..")
 import pyrads
 
-from scipy.integrate import trapz,simps,cumtrapz
+from scipy.integrate import trapezoid, simpson
 
 ### -----------------------------------
 ### Helpers
@@ -99,19 +99,19 @@ if saveOutput:
 
         # compute OLR etc:
         olr_spec = pyrads.Get_Fluxes.Fplus_alternative(0,g) # (spectrally resolved=irradiance)
-        olr = simps(olr_spec,g.n)
+        olr = simpson(olr_spec,x=g.n)
 
         # compute fraction of surface flux that makes it to space
         surf_spec = g.B_surf * np.exp(-g.tau[-1,:])
-        surf = simps(surf_spec,x=g.n)
+        surf = simpson(surf_spec,x=g.n)
 
         # compute spectrally averaged transmission function...
         weight = np.pi* pyrads.Planck.dPlanckdT_n( g.n,Ts )
-        trans = trapz( np.exp(-g.tau[-1,:]) * weight,x=g.n ) / trapz( weight,x=g.n )
+        trans = trapezoid( np.exp(-g.tau[-1,:]) * weight,x=g.n ) / trapezoid( weight,x=g.n )
 
         # Simple feedback model (like above, without normalization)
         weight = np.pi* pyrads.Planck.dPlanckdT_n( g.n,Ts )
-        lam = trapz( np.exp(-g.tau[-1,:]) * weight,x=g.n )
+        lam = trapezoid( np.exp(-g.tau[-1,:]) * weight,x=g.n )
 
         print( "\n",Ts,g.ps/1e5,olr,surf, "\n")
 

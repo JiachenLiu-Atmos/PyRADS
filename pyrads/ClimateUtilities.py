@@ -51,15 +51,17 @@ from __future__ import division, print_function, absolute_import
 try:
     import numpy
     import numpy as Numeric   #For backwards compatibility
-    numpy.Float = numpy.float #For backwards compatibility
-except:
+    # ``np.float`` was removed in NumPy 1.24. Numeric's old ``Float``
+    # name is only used as a dtype in this module.
+    numpy.Float = float #For backwards compatibility
+except ImportError:
     try:
         import Numeric
         import Numeric as numpy    #For frontwards compatibility
         numpy.float = numpy.Float  #For frontwards compatibility
         print( "numpy not found. Using Numeric instead")
         print( "Everything should still work, but consider upgrading to numpy")
-    except:
+    except ImportError:
         print( "Neither numpy nor Numeric found.")
         print( "Please install numpy (preferred) or Numeric.")
 

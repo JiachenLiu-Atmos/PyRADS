@@ -15,7 +15,7 @@ from .Absorption_Crosssections_HITRAN2016_lorentz import getKappa_HITRAN as getK
 from .Absorption_Crosssections_HITRAN2016_voigt import getKappa_HITRAN as getKappa_HITRAN_voigt
 from . import Absorption_Continuum_MTCKD
 from .Absorption_Continuum_MTCKD import get_H2OContinuum
-from scipy.integrate import cumtrapz
+from scipy.integrate import cumulative_trapezoid
 from numba import jit
 
 from .Thermodynamics import convert_molar_to_mass_ratio
@@ -58,7 +58,7 @@ def compute_tau_H2ON2(p,T,q,grid,params,RH=1.,use_numba=False,lineShape="lorentz
 
     # Integrate to get optical thickness:
     p2d = np.tile( p,(grid.Nn,1) ).T
-    tau = 1./(params.g*params.cosThetaBar) * cumtrapz( kappa,x=p2d,initial=0.,axis=0 )
+    tau = 1./(params.g*params.cosThetaBar) * cumulative_trapezoid( kappa,x=p2d,initial=0.,axis=0 )
 
     return tau
 
@@ -112,9 +112,8 @@ def compute_tau_H2ON2_CO2dilute(p,T,q,ppv_CO2,grid,params,RH=1.,use_numba=False,
 
     # Integrate to get optical thickness:
     p2d = np.tile( p,(grid.Nn,1) ).T
-    tau     = 1./(params.g*params.cosThetaBar) * cumtrapz( kappa,x=p2d,initial=0.,axis=0 )
-    tau_h2o = 1./(params.g*params.cosThetaBar) * cumtrapz( kappa_h2o,x=p2d,initial=0.,axis=0 )
-    tau_co2 = 1./(params.g*params.cosThetaBar) * cumtrapz( kappa_co2,x=p2d,initial=0.,axis=0 )
+    tau     = 1./(params.g*params.cosThetaBar) * cumulative_trapezoid( kappa,x=p2d,initial=0.,axis=0 )
+    tau_h2o = 1./(params.g*params.cosThetaBar) * cumulative_trapezoid( kappa_h2o,x=p2d,initial=0.,axis=0 )
+    tau_co2 = 1./(params.g*params.cosThetaBar) * cumulative_trapezoid( kappa_co2,x=p2d,initial=0.,axis=0 )
     return tau, tau_h2o, tau_co2
-
 

@@ -7,7 +7,7 @@ import time
 sys.path.append("..")
 import pyrads
 
-from scipy.integrate import trapz,simps,cumtrapz
+from scipy.integrate import simpson
 
 ### -----------------------------------
 ### Helpers
@@ -87,6 +87,6 @@ g.B = np.pi* pyrads.Planck.Planck_n( g.wave, T_2D )    # [press x wave]
 
 # compute OLR etc:
 olr_spec = pyrads.Get_Fluxes.Fplus_alternative(0,g) # (spectrally resolved=irradiance)
-olr = simps(olr_spec,g.n)
+olr = simpson(olr_spec,x=g.n)
 
 print( "OLR = ",olr)

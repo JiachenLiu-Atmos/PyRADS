@@ -5,8 +5,7 @@ from . import phys
 from .Planck import Planck_n
 
 # Here: choose integrator
-from scipy.integrate import trapz as numint
-##from scipy.integrate import simps as numint
+from scipy.integrate import trapezoid as numint
 
 
 ####
